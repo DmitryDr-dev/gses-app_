@@ -6,9 +6,11 @@ namespace App\Domain\User;
 
 use App\Infrastructure\User\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
+#[UniqueEntity('email')]
 class User
 {
     #[ORM\Id]
@@ -22,10 +24,10 @@ class User
     #[ORM\Column(name: 'last_name', length: 255)]
     private string $lastName;
 
-    #[ORM\Column(name: 'email', length: 255)]
+    #[ORM\Column(name: 'email', length: 255, unique: true)]
     private string $email;
 
-    public function create(string $firstName, string $lastName, string $email): self
+    public static function create(string $firstName, string $lastName, string $email): self
     {
         return new self(null, $firstName, $lastName, $email);
     }
